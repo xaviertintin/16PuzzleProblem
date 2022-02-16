@@ -1,57 +1,20 @@
-Astars.java
-        Details
-        Activity
-        Sharing Info.
-        Who has access
-
-        General Info.
-        System properties
-        Type
-        Java
-        Size
-        8 KB
-        Storage used
-        8 KB
-        Location
-
-        8puzzle A* search java code
-        Owner
-        Just4 Code
-        Modified
-        Mar 7, 2019 by Just4 Code
-        Opened
-        9:18 AM by me
-        Created
-        Mar 7, 2019
-        Description.
-        No description
-        Download permissions.
-        Viewers can download
-
-        /*
-         * To change this license header, choose License Headers in Project Properties.
-         * To change this template file, choose Tools | Templates
-         * and open the template in the editor.
-         */
-        package astar;
-
+package com.astar;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.*;
-
-
 /**
  *
- * @author Saurabh
+ * @author Grupo 2
+ * David Mena
+ * Ricardo Teran
+ * Xavier Tintin
  */
 public class Astars {
-
-    private int a[][]=new int[4][3];
-    private int b[][]=new int[4][3];
-    private int Expnode[][]=new int[4][3];
+    private int a[][]=new int[5][4];
+    private int b[][]=new int[5][4];
+    private int Expnode[][]=new int[5][4];
     private int l=0;
-    private int parent[][]=new int[4][3];
-    BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
+    private int parent[][]=new int[5][4];
     List<int[][]> l1=new ArrayList();
     List<int[][]> l2=new ArrayList();
     private int row=0;
@@ -64,214 +27,159 @@ public class Astars {
     private int pathcost=0;
     private int StatesEnqued=1;
 
-    public void getState()throws Exception
-    {
+    public void getState(int c[][])throws Exception {
+        System.out.println("\n Enter the initial State:");
 
-        System.out.println("\n Enter the initial State");
-        for(int i=0;i<3;i++)
-        {
-            for(int j=0;j<3;j++)
-            {
-                a[i][j]=Integer.parseInt(br.readLine());
-            }
-
-        }
-        a[3][1]=depth;
-
-
-        System.out.println("\n Enter the final State");
-        for(int i=0;i<3;i++)
-        {
-            for(int j=0;j<3;j++)
-            {
-
-                b[i][j]=Integer.parseInt(br.readLine());
-
+        for(int i=0;i<4;i++) {
+            for(int j=0;j<4;j++) {
+                a[i][j]=c[i][j];
             }
         }
+        a[4][1]=depth;
 
+        System.out.println("\n Enter the final State:");
+        b[0][0]=1;
+        b[0][1]=2;
+        b[0][2]=3;
+        b[0][3]=4;
+        b[1][0]=5;
+        b[1][1]=6;
+        b[1][2]=7;
+        b[1][3]=8;
+        b[2][0]=9;
+        b[2][1]=10;
+        b[2][2]=11;
+        b[2][3]=12;
+        b[3][0]=13;
+        b[3][1]=14;
+        b[3][2]=15;
+        b[3][3]=0;
     }
-
-    public void display()
-    {
-
-        System.out.println("\n The initial state is");
-        for(int i=0;i<3;i++)
-        {
-            for(int j=0;j<3;j++)
-            {
-                System.out.print(" "+a[i][j]);
-            }
-            System.out.println();
-
-        }
-
-
-        System.out.println("\n ==============================================================================");
-
-        System.out.println("\n The Final State");
-        for(int i=0;i<3;i++)
-        {
-            for(int j=0;j<3;j++)
-            {
-
-                System.out.print(" "+b[i][j]);
+    public void display() {
+        System.out.println("\n The initial state is:");
+        for(int i=0;i<4;i++){
+            for(int j=0;j<4;j++){
+                System.out.print("\t"+a[i][j]);
             }
             System.out.println();
         }
 
-
         System.out.println("\n ==============================================================================");
 
-
+        System.out.println("\n The final state is:");
+        for(int i=0;i<4;i++) {
+            for(int j=0;j<4;j++) {
+                System.out.print("\t"+b[i][j]);
+            }
+            System.out.println();
+        }
+        System.out.println("\n ==============================================================================");
     }
-
-    public void displayState(int a[][])
-    {
-
+    public void displayState(int a[][]) {
+        GUI16Puzzle gui = new GUI16Puzzle();
+        gui.setVisible(false);
         System.out.println("\n ==============================================================================");
-        for(int i=0;i<3;i++)
-        {
-            for(int j=0;j<3;j++)
-            {
-                System.out.print(" "+a[i][j]);
+        for(int i=0;i<4;i++) {
+            for(int j=0;j<4;j++) {
+                System.out.print("\t"+a[i][j]);
+                gui.c[i][j]=a[i][j];
             }
             System.out.println("");
         }
-        System.out.println("\n ==============================================================================");
+        System.out.println(" ==============================================================================\n");
     }
-
-    int getMin(){
-
-        int min = l1.get(0)[3][0];
-        int index = 0;
-        for(int i=1;i<l1.size();i++)
-        {
-            if(l1.get(i)[3][0]<min){
-                min = l1.get(i)[3][0];
-                index =i;
-            }
-        }
-        System.out.print("min cost selected"+min);
-        return index;
-    }
-    public String TreeSearch()
-    {
-
+    public int[][] TreeSearch() {
         l1.add(a);
-        while(true)
-        {
-            if(l1.isEmpty()==false)
-            {
-
+        while(true) {
+            if(l1.isEmpty()==false) {
                 Expnode=l1.remove(getMin());
                 displayState(Expnode);
             }
-            else
-            {
-                return "Fail";
+            else {
+                System.out.println("Fail");
             }
             t=0;
-            for(int i=0;i<3;i++)
-            {
-                for(int j=0;j<3;j++)
-                {
-                    if(Expnode[i][j]!=b[i][j])
-                    {
+            for(int i=0;i<4;i++) {
+                for(int j=0;j<4;j++) {
+                    if(Expnode[i][j]!=b[i][j]) {
                         t=1;
                     }
                 }
             }
-            if(t!=1)
-            {
-
-                System.out.println("The path cost is"+Expnode[3][1]);
-
-                System.out.println("The Total Number of states Explored"+StatesEnqued);
-                return "success";
+            if(t!=1) {
+                System.out.println("The path cost is: "+Expnode[4][1]);
+                System.out.println("The Total Number of states Explored: "+StatesEnqued);
+                System.out.println("Success");
+                return Expnode;
             }
-            else
-            {
-
-                expand(Expnode,Expnode[3][1]+1);
-                for(int i=0;i<3;i++)
-                {
-                    for(int j=0;j<3;j++)
-                    {
+            else {
+                expand(Expnode,Expnode[4][1]+1);
+                for(int i=0;i<4;i++) {
+                    for(int j=0;j<4;j++) {
                         parent[i][j]=Expnode[i][j];
                     }
                 }
             }
         }
     }
-    public void expand(int k[][],int depth)
-    {
-
+    int getMin(){
+        int min = l1.get(0)[4][0];
+        int index = 0;
+        for(int i=1;i<l1.size();i++) {
+            if(l1.get(i)[4][0]<min){
+                min = l1.get(i)[4][0];
+                index =i;
+            }
+        }
+        System.out.print("\nMinimum cost selected: "+min+"\n");
+        return index;
+    }
+    public void expand(int k[][],int depth) {
         findSuccessor(k,depth);
         prow=row;
         pcol=col;
     }
-    public void findSuccessor(int orgnode[][],int depth)
-    {
-
+    public void findSuccessor(int orgnode[][],int depth) {
         findspace(orgnode);
-        if((row-1>=0 && prow!=row-1)|| (row-1>=0 && prow==-1))
-        {
-            int n[][]=new int[4][3];
-            for(int i=0;i<3;i++)
-            {
-                for(int j=0;j<3;j++)
-                {
+        if((row-1>=0 && prow!=row-1)|| (row-1>=0 && prow==-1)) {
+            int n[][]=new int[5][4];
+            for(int i=0;i<4;i++) {
+                for(int j=0;j<4;j++) {
                     n[i][j]=orgnode[i][j];
                 }
             }
-
             swap(n,row-1,col,depth);                //For top shift
         }
-        if((col+1<=2 && pcol!=col+1) || (col+1<=2 && pcol==-1))
-        {
-            int n[][]=new int[4][3];
-            for(int i=0;i<3;i++)
-            {
-                for(int j=0;j<3;j++)
-                {
+        if((col+1<=3 && pcol!=col+1) || (col+1<=3 && pcol==-1)) {
+            int n[][]=new int[5][4];
+            for(int i=0;i<4;i++) {
+                for(int j=0;j<4;j++) {
                     n[i][j]=orgnode[i][j];
                 }
             }
-
             swap(n,row,col+1,depth);               //for Right shift
         }
-        if((row+1<=2 && prow!=row+1) || (row+1)<=2 && prow==-1)
-        {
-            int n[][]=new int[4][3];
-            for(int i=0;i<3;i++)
-            {
-                for(int j=0;j<3;j++)
-                {
+        if((row+1<=3 && prow!=row+1) || (row+1)<=3 && prow==-1) {
+            int n[][]=new int[5][4];
+            for(int i=0;i<4;i++) {
+                for(int j=0;j<4;j++) {
                     n[i][j]=orgnode[i][j];
                 }
             }
-
             swap(n,row+1,col,depth);                //for bottom shift
         }
 
-        if((col-1>=0 && pcol!=col-1) || (col-1)>=0 && pcol==-1)
-        {
-            int n[][]=new int[4][3];
-            for(int i=0;i<3;i++)
-            {
-                for(int j=0;j<3;j++)
-                {
+        if((col-1>=0 && pcol!=col-1) || (col-1)>=0 && pcol==-1) {
+            int n[][]=new int[5][4];
+            for(int i=0;i<4;i++) {
+                for(int j=0;j<4;j++) {
                     n[i][j]=orgnode[i][j];
                 }
             }
             swap(n,row,col-1,depth);                //for left shift
         }
     }
-    public void swap(int listnode[][],int j,int k,int depth)
-    {
-
-
+    public void swap(int listnode[][],int j,int k,int depth) {
         int count=0;
         int cost=0;
         int temp=listnode[j][k];
@@ -279,35 +187,24 @@ public class Astars {
         //int depth=0;
         listnode[j][k]=listnode[row][col];
         listnode[row][col]=temp;
-        listnode[3][1]=depth;
-        for(int i=0;i<3;i++)
-        {
-            for(int p=0;p<3;p++)
-            {
-                if(listnode[i][p]!=b[i][p])
-                {
+        listnode[4][1]=depth;
+        for(int i=0;i<4;i++) {
+            for(int p=0;p<4;p++) {
+                if(listnode[i][p]!=b[i][p]) {
                     count++;
                 }
             }
         }
-
         StatesEnqued++;
-        cost=listnode[3][1]+count;
-        System.out.print("costs is: "+cost+" ");
-        listnode[3][0]=cost;
+        cost=listnode[4][1]+count;
+        System.out.print("Costs is: "+cost+" ");
+        listnode[4][0]=cost;
         l1.add(listnode);
-
     }
-    public void findspace(int orgnode[][])
-    {
-
-
-        for(int i=0;i<3;i++)
-        {
-            for(int j=0;j<3;j++)
-            {
-                if(orgnode[i][j]==0)
-                {
+    public void findspace(int orgnode[][]) {
+        for(int i=0;i<4;i++) {
+            for(int j=0;j<4;j++) {
+                if(orgnode[i][j]==0) {
                     row=i;
                     col=j;
                     break;
