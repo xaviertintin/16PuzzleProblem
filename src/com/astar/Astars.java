@@ -86,6 +86,9 @@ public class Astars {
             }
             System.out.println("");
         }
+
+
+
         System.out.println(" ==============================================================================\n");
     }
     public int[][] TreeSearch() {
@@ -93,7 +96,7 @@ public class Astars {
         while(true) {
             if(l1.isEmpty()==false) {
                 Expnode=l1.remove(getMin());
-                displayState(Expnode);
+                displayState(Expnode);                  // get array every time this function is executed
             }
             else {
                 System.out.println("Fail");

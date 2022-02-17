@@ -24,7 +24,7 @@ public class GUI16Puzzle extends JFrame {
     private JTextField txt16;
     private JButton btnEnter;
     private JLabel lblTitle;
-    public int[][] c = new int [5][4];          //creating new array for input
+    public static int[][] c = new int [5][4];          //creating new array for input
 
     public GUI16Puzzle() {
         setContentPane(panelMain);
